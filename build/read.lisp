@@ -85,8 +85,7 @@ entry per code point which is stored in *CHAR-DATABASE*."
                        (general-category symbol)
                        (combining-class integer)
                        (bidi-class symbol)
-                       ;; decomposition mapping, ignored for now
-                       _
+                       (decomposition-mapping decomposition nil)
                        (decimal-digit integer nil)
                        (digit integer nil)
                        (numeric rational nil)
@@ -100,6 +99,7 @@ entry per code point which is stored in *CHAR-DATABASE*."
                       "UnicodeData.txt" t)
     (pushnew general-category *general-categories* :test #'eq)
     (pushnew bidi-class *bidi-classes* :test #'eq)
+    (setf *compatibility-flags* (union *compatibility-flags* (car decomposition-mapping) :test #'eq))
     ;; if the name starts with #\<, it's not really a name but denotes
     ;; a range - some of these names (CJK unified ideographs and
     ;; Hangul syllables) will be computed later, the others are NIL
@@ -113,6 +113,8 @@ entry per code point which is stored in *CHAR-DATABASE*."
                            :general-category general-category
                            :combining-class combining-class
                            :bidi-class bidi-class
+                           :compatibility-flags (car decomposition-mapping)
+                           :decomposition-mapping (cdr decomposition-mapping)
                            :numeric-type (cond (decimal-digit '#.(property-symbol "Decimal"))
                                                (digit '#.(property-symbol "Digit"))
                                                (numeric '#.(property-symbol "Numeric")))

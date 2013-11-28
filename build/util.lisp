@@ -162,6 +162,16 @@ list of two integers, the major and minor version."
       (mapcar 'parse-integer (ppcre:split "\\." value))
     (list major minor)))
 
+(defmethod parse-value (value (type (eql 'decomposition)) default)
+  "The method for the decomposition mapping list, which returns a cons
+of a list of flags as symbols and a list of integers for the actual
+decomposition characters.  The complete absence of a mapping is indicated
+by returning NIL instead."
+  (let ((tokens (ppcre:split " " value)))
+    (when tokens
+      (cons (mapcar 'register-property-symbol (remove "<" tokens :test-not #'search))
+            (mapcar #'parse-hex (remove "<" tokens :test #'search))))))
+
 (defun parse-one-line (parts &optional types defaults)
   "Parses one line of a Unicode data file and returns a list of Lisp
 objects as determined by TYPES and DEFAULTS.  It is assumed that the

@@ -136,6 +136,8 @@ using DUMP-METHOD."
     (dump-method 'age 'age* out #'equal)
     (dump-method 'general-category 'general-category* out)
     (dump-method 'bidi-class 'bidi-class* out)
+    (dump-method 'compatibility-flags 'compatibility-flags* out #'equal)
+    (dump-method 'decomposition-mapping 'decomposition-mapping* out #'equal)
     (dump-method 'numeric-type 'numeric-type* out)
     (dump-method 'numeric-value 'numeric-value* out #'eql)
     (dump-method 'combining-class 'combining-class* out #'eql)
@@ -186,7 +188,8 @@ DUMP-LIST."
     (dump-list '*scripts* out)
     (dump-list '*code-blocks* out)
     (dump-list '*binary-properties* out)
-    (dump-list '*bidi-classes* out)))
+    (dump-list '*bidi-classes* out)
+    (dump-list '*compatibility-flags* out)))
 
 (defun dump-derived-tests ()
   "Parses the Unicode data file \"DerivedCoreProperties.txt\" \(which

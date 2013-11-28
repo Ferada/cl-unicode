@@ -243,6 +243,14 @@ See also BIDI-CLASSES")
   (:method ((char character))
    (bidi-class (char-code char))))
 
+(defgeneric compatibility-flags (c)
+  (:method ((char character))
+   (compatibility-flags (char-code char))))
+
+(defgeneric decomposition-mapping (c)
+  (:method ((char character))
+   (decomposition-mapping (char-code char))))
+
 (defun bidi-mirroring-glyph (c &key want-code-point-p)
   "Returns the Bidi mirroring glyph for a character if the character
 has the \"BidiMirrored\" property and an appropriate mirroring glyph
@@ -367,6 +375,9 @@ HAS-BINARY-PROPERTY."
   "Returns a sorted list of all Bidi classes known to CL-UNICODE.
 These are the possible return values of BIDI-CLASS."
   (sort (mapcar 'property-name *bidi-classes*) 'string-lessp))
+
+(defun list-all-compatibility-flags ()
+  (sort (mapcar 'property-name *compatibility-flags*) 'string-lessp))
 
 (defun recognized-properties (&optional all)
   "Returns a list of all property names known to CL-UNICODE.  These

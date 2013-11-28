@@ -78,6 +78,18 @@ character - a property symbol.")
                :type symbol
                :documentation "The Bidi class of the character - a
 property symbol.")
+   (compatibility-flags :initarg :compatibility-flags
+                        :initform nil
+                        :accessor compatibility-flags*
+                        :type list
+                        :documentation "A list of property symbols
+denoting the decomposition mapping compatibility flags.")
+   (decomposition-mapping :initarg :decomposition-mapping
+                          :initform nil
+                          :accessor decomposition-mapping*
+                          :type list
+                          :documentation "A list of code points
+denoting the decomposition mapping.")
    (bidi-mirroring-glyph :initform nil
                          :accessor bidi-mirroring-glyph*
                          :type (or fixnum null)

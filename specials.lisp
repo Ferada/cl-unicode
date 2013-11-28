@@ -72,6 +72,8 @@ corresponding character \(unless all of them are NIL).")
 (defvar *bidi-classes* nil
   "A list of all property symbols which denote Bidi classes.")
 
+(defvar *compatibility-flags* nil)
+
 (defvar *property-map* (make-hash-table :test 'equalp :size 1000)
   "A hash table which \(case-insensitively) maps \"canonicalized\"
 property names \(including aliases) to the corresponding property

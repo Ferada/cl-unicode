@@ -43,6 +43,8 @@
            :age
            :bidi-class
            :bidi-classes
+           :compatibility-flags
+           :decomposition-mapping
            :bidi-mirroring-glyph
            :binary-properties
            :canonicalize-name
