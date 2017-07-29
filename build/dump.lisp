@@ -142,7 +142,8 @@ using DUMP-METHOD."
     (dump-method 'numeric-value 'numeric-value* out #'eql)
     (dump-method 'combining-class 'combining-class* out #'eql)
     (dump-method 'bidi-mirroring-glyph% 'bidi-mirroring-glyph* out #'eql)
-    (dump-method 'binary-props 'binary-props* out #'equal)))
+    (dump-method 'binary-props 'binary-props* out #'equal)
+    (dump-method 'hangul-syllable-type 'hangul-syllable-type* out #'equal)))
 
 (defun dump-hash-table (hash-table-name stream)
   "Writes code to the STREAM which reinitializes the hash table
@@ -172,7 +173,8 @@ hash-tables.lisp using DUMP-HASH-TABLE."
     (dump-hash-table '*jamo-short-names* out)
     ;; finally add code which adds the computed Hangul syllable names
     ;; at load time
-    (print '(add-hangul-names) out)))
+    (print '(add-hangul-names) out)
+    (dump-hash-table '*primary-composites* out)))
 
 (defun dump-list (list-name stream)
   "Writes code to the STREAM which reinitializes the list contained in

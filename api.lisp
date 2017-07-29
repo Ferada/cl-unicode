@@ -224,6 +224,7 @@ category.
 
 See also GENERAL-CATEGORIES.")
   (:method :around (c)
+   (declare (ignore c))
    (multiple-value-bind (name symbol)
        (call-next-method)
      (cond (name (values name symbol))
@@ -250,6 +251,10 @@ See also BIDI-CLASSES")
 (defgeneric decomposition-mapping (c)
   (:method ((char character))
    (decomposition-mapping (char-code char))))
+
+(defgeneric hangul-syllable-type (c)
+  (:method ((char character))
+   (hangul-syllable-type (char-code char))))
 
 (defun bidi-mirroring-glyph (c &key want-code-point-p)
   "Returns the Bidi mirroring glyph for a character if the character
@@ -290,6 +295,7 @@ non-negative integer.  C can be the character's code point \(a
 positive integer) or a \(Lisp) character assuming its character code
 is also its Unicode code point.")
   (:method :around (c)
+   (declare (ignore c))
    (or (call-next-method) 0))
   (:method ((char character))
    (combining-class (char-code char))))

@@ -157,9 +157,11 @@ algorithm below."
 (define-hangul-constant "LBase" #x1100)
 (define-hangul-constant "VBase" #x1161)
 (define-hangul-constant "TBase" #x11a7)
+(define-hangul-constant "LCount" 19)
 (define-hangul-constant "VCount" 21)
 (define-hangul-constant "TCount" 28)
 (define-hangul-constant "NCount" (* +V-COUNT+ +T-COUNT+))
+(define-hangul-constant "SCount" (* +L-COUNT+ +N-COUNT+))
 
 (declaim (inline compute-hangul-name))
 (defun compute-hangul-name (code-point)

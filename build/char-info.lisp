@@ -90,6 +90,10 @@ denoting the decomposition mapping compatibility flags.")
                           :type list
                           :documentation "A list of code points
 denoting the decomposition mapping.")
+   (hangul-syllable-type :initarg :hangul-syllable-type
+                         :initform nil
+                         :accessor hangul-syllable-type*
+                         :type symbol)
    (bidi-mirroring-glyph :initform nil
                          :accessor bidi-mirroring-glyph*
                          :type (or fixnum null)

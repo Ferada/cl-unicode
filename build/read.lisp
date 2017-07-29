@@ -193,6 +193,18 @@ later used to compute Hangul syllable names."
     (with-code-point-range (code-point code-point-range)
       (setf (gethash code-point *jamo-short-names*) short-name))))
 
+(defun read-hangul-syllable-type ()
+  (with-unicode-file ((code-point-range (type symbol)) "HangulSyllableType.txt")
+    (with-code-point-range (code-point code-point-range)
+      (setf (hangul-syllable-type* (aref *char-database* code-point)) type))))
+
+(defun read-composition-exclusions ()
+  (let ((property '#.(property-symbol "CompositionExclusion")))
+    (pushnew property *binary-properties* :test #'eq)
+    (with-unicode-file ((code-point-range) "CompositionExclusions.txt")
+      (with-code-point-range (code-point code-point-range)
+        (push property (binary-props* (aref *char-database* code-point)))))))
+
 (defun default-bidi-class (char-info)
   "Returns the default Bidi class for the character described by the
 CHAR-INFO object CHAR-INFO.  The default is computed as explained in
@@ -239,6 +251,8 @@ source code files for CL-UNICODE."
   (read-derived-age)
   (read-mirroring-glyphs)
   (read-jamo)
+  (read-hangul-syllable-type)
+  (read-composition-exclusions)
   (set-default-bidi-classes))
 
 (defun build-name-mappings ()
@@ -272,6 +286,26 @@ source code files for CL-UNICODE."
         when (and mappings (some #'identity mappings))
         do (setf (gethash (code-point char-info) *case-mappings*) mappings)))
 
+;; TODO: subtrace Composition_Exclusion=True cases
+;; TODO: subtrace Full_Composition_Exclusion=True cases
+(defun build-primary-composites ()
+  (clrhash *primary-composites*)
+  (loop for char-info across *char-database*
+        when (and char-info
+                  (not (compatibility-flags* char-info))
+                  (not (member '#.(property-symbol "CompositionExclusion")
+                               (binary-props* char-info)
+                               :test #'eq)))
+        do (let ((decomposition (decomposition-mapping* char-info)))
+             (when decomposition
+               (let ((second (second decomposition)))
+                 (when second
+                   (let ((code-point (code-point char-info)))
+                     (setf (gethash (first decomposition) *primary-composites*)
+                           (list*
+                            (cons second code-point)
+                            (gethash (first decomposition) *primary-composites*))))))))))
+
 (defun build-data-structures ()
   "One function to combine the complete process of parsing all Unicode
 data files and building the corresponding Lisp datastructures in
@@ -281,4 +315,5 @@ memory."
     (format t "~&;;; Building hash tables")
     (force-output))
   (build-name-mappings)
-  (build-case-mapping))
+  (build-case-mapping)
+  (build-primary-composites))
